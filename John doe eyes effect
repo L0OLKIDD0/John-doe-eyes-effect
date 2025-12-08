@@ -1,0 +1,75 @@
+-- 🔥 John Doe Eye Particle Effect 🔥
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+
+-- Fungsi pembuat instance
+local function New(Object, Parent, Name, Data)
+	local obj = Instance.new(Object)
+	for i,v in pairs(Data or {}) do
+		obj[i] = v
+	end
+	obj.Parent = Parent
+	obj.Name = Name
+	return obj
+end
+
+-- 🔥 Fungsi efek api
+local function BurningEff(part)
+	local eff1 = Instance.new("ParticleEmitter", part)
+	eff1.Size = NumberSequence.new(.1)
+	eff1.Transparency = NumberSequence.new({
+		NumberSequenceKeypoint.new(0,0),
+		NumberSequenceKeypoint.new(.2,0),
+		NumberSequenceKeypoint.new(1,1)
+	})
+	eff1.LightEmission = 1
+	eff1.Lifetime = NumberRange.new(1)
+	eff1.Speed = NumberRange.new(0)
+	eff1.Rate = 100
+	eff1.Texture = "rbxassetid://347504241" -- partikel merah api
+	eff1.Acceleration = Vector3.new(0,10,0)
+	eff1.Color = ColorSequence.new(Color3.new(1,0,0))
+
+	local eff2 = Instance.new("ParticleEmitter", part)
+	eff2.Size = NumberSequence.new(.1)
+	eff2.Transparency = NumberSequence.new({
+		NumberSequenceKeypoint.new(0,0),
+		NumberSequenceKeypoint.new(.2,0),
+		NumberSequenceKeypoint.new(1,1)
+	})
+	eff2.LightEmission = 1
+	eff2.Lifetime = NumberRange.new(1)
+	eff2.Speed = NumberRange.new(0)
+	eff2.Rate = 100
+	eff2.Texture = "rbxassetid://347504259" -- variasi warna partikel
+	eff2.Acceleration = Vector3.new(0,10,0)
+	eff2.Color = ColorSequence.new(Color3.new(1,0,0))
+end
+
+-- 🔴 Membuat bola api mata
+local head = char:WaitForChild("Head")
+
+-- Membuat part "mata api"
+local EyeFire = New("Part", head, "EyeFire", {
+	BrickColor = BrickColor.new("Really red"),
+	Material = Enum.Material.Neon,
+	Size = Vector3.new(0.4, 0.2, 0.2),
+	CanCollide = false,
+	Anchored = false,
+	Color = Color3.new(1, 0, 0)
+})
+
+-- Posisi partikel di depan mata kanan
+local weld = Instance.new("Weld", EyeFire)
+weld.Part0 = EyeFire
+weld.Part1 = head
+weld.C0 = CFrame.new(0, -0.6, -0.2) -- geser posisi sesuai arah pandang
+
+-- Tambahkan mesh agar bentuknya seperti silinder kecil
+local mesh = Instance.new("CylinderMesh", EyeFire)
+mesh.Scale = Vector3.new(1, 0.15, 1)
+mesh.Offset = Vector3.new(0, 0, 0)
+
+-- Aktifkan efek api
+BurningEff(EyeFire)
